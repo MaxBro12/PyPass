@@ -1,4 +1,10 @@
-all_simb = ' ABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ1234567890!@#$%^&*()_-+\\|/.,;:\'"`~abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя\n\t'
+from curses import longname
+from random import randint
+
+
+all_simb = ' ABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫ'\
+    'ЬЭЮЯ1234567890!@#$%^&*()_-+\\|/.,;:\'"`~abcdefghijklmnopqrstuvwx'\
+    'yzабвгдеёжзийклмнопрстуфхцчшщъыьэюя\n\t'
 all_simb = tuple(all_simb)
 
 
@@ -61,6 +67,13 @@ def bits_convert(bits):
     return new_bits
 
 
-#file = open('data.txt', 'r')
-#text = file.readlines()[0]
-#print(decrypt(text, 10))
+def newpass():
+    long = int(input('Введите длину предполагаемого пароля:\n'))
+    print(f'Новый пароль:\n{generate_password(long)}')
+
+
+def generate_password(plen: int = 1):
+    password = ''
+    for i in range(plen):
+        password += all_simb[randint(0, len(all_simb))]
+    return password

@@ -1,4 +1,5 @@
 from datacsv import Table
+from decryption import newpass
 
 
 progRun = True
@@ -16,6 +17,7 @@ def help_fun():
           '\t"viewc" - откроет информацию об определенной метке\n'
           '\t"add" - добавить строку в конец таблицы\n'
           '\t"remove" - удалить строку из таблицы\n'
+          '\t"newpass" - придумает пароль\n'
           )
 
 
@@ -28,7 +30,8 @@ commands = {
     "load": a.read_txt,
     "save": a.save_txt,
     "view": a.view,
-    "viewc": a.view_current
+    "viewc": a.view_current,
+    "newpass": newpass
     }
 
 
@@ -51,6 +54,7 @@ def user_input():
 
 
 if __name__ == '__main__':
-    print('Приветствую в закрытой версии шифратора паролей!\nИспользуйте команду "help"')
+    print('Приветствую в закрытой версии шифратора паролей!\n',
+          'Используйте команду "help"')
     while progRun:
         user_input()
