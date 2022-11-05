@@ -1,7 +1,7 @@
 from io import StringIO
 from pandas import DataFrame, read_csv
 from os.path import exists
-from decryption import *
+from code.handlers.decryption import *
 
 class Table:
     def __init__(self):
