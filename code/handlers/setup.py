@@ -22,13 +22,18 @@ def main_check():
             print('Не известная OS')
             raise OsException
 
+    return os
+
 
 def win_init():
+    from tools.dirs import (
+        win_hide_file,
+    )
     pass
 
 
 def linux_init():
-    pass
+    print('All ready')
 
 
 def check_settings():

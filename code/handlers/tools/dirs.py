@@ -5,12 +5,6 @@ from os.path import (
     join,
     exists,
 )
-from win32con import (
-    FILE_ATTRIBUTE_HIDDEN,
-)
-from win32api import (
-    SetFileAttributes,
-)
 
 
 def create_folder(name: str, way: str = None) -> bool:
@@ -96,6 +90,13 @@ def load_file(name: str):
 
 
 def win_hide_file(name: str):
+    from win32con import (
+        FILE_ATTRIBUTE_HIDDEN,
+    )
+    from win32api import (
+        SetFileAttributes,
+    )
+
     try:
         SetFileAttributes(name, FILE_ATTRIBUTE_HIDDEN)
         return True
