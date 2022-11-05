@@ -1,8 +1,15 @@
+from handlers.tools import (
+    ex,
+    get_os,
+)
+
+
 class UserInp:
     def __init__(self):
         self.bug_rep = True
         self.progrun = False
         self.commands = {
+            'pypass': self.pypass,
             'help': self.help,
             'stop': self.stop,
             'init': self.init,
@@ -64,6 +71,8 @@ class UserInp:
             print(adt[0])
             print('List of all commands:')
             for command in self.commands:
+                if command == 'pypass':
+                    continue
                 print(f'\t{command} - {self.commands[command].__doc__}')
         else:
             for com in adt:
@@ -78,18 +87,29 @@ class UserInp:
                     self.user_input()
 
     def stop(self):
-        '''Stopping user input'''
+        """Правильно закрывает приложение.
+        Рекомендуется закрывать приложение именно через эту команду!"""
         self.progrun = False
+
+    def pypass(self, args: list):
+        match args[0]:
+            case 'kill':
+                raise ex
+            case 'os':
+                print(get_os())
 
     # ! Главное ===============================================================
     def init(self):
-        pass
+        """Инизиализирует базу паролей"""
+        return 1 / 0
 
     def delete(self):
+        """Удаляет базу паролей и приложения"""
         pass
 
     # ? Основное ==============================================================
     def add(self):
+        """Добавляет в базу """
         pass
 
     def remove(self):
