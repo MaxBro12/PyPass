@@ -2,15 +2,14 @@ from os.path import (
     exists,
 )
 
-from tools import (
+from core import (
     get_os,
     OsException,
-    create_file,
 )
 
 
 def main_check():
-    os = get_os
+    os = get_os()
     match os:
         case 'win':
             win_init()
@@ -26,14 +25,14 @@ def main_check():
 
 
 def win_init():
-    from tools.dirs import (
+    from core.dirs import (
         win_hide_file,
     )
-    pass
+    print('Window works')
 
 
 def linux_init():
-    print('All ready')
+    print('Linux works')
 
 
 def check_settings():

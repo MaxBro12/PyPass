@@ -1,4 +1,4 @@
-from handlers.tools import (
+from core import (
     ex,
     get_os,
 )
@@ -18,6 +18,7 @@ class UserInp:
             'remove': self.remove,
             'list': self.list,
             'view': self.view,
+            'newpass': self.create_pass,
         }
 
     def run(self):
@@ -108,6 +109,9 @@ class UserInp:
         pass
 
     # ? Основное ==============================================================
+    def create_pass(self, args: list = None):
+        pass
+
     def add(self):
         """Добавляет в базу """
         pass

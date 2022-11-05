@@ -1,8 +1,10 @@
 from userinp import UserInp
-from handlers.debug import create_log_file
+from core.debug import create_log_file
+from handlers.setup import main_check
 
 
 def main():
+    main_check()
     process = UserInp()
     process.run()
 

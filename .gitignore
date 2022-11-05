@@ -1,0 +1,14 @@
+.vscode
+.idea
+.gitirnore
+
+__pycache__
+
+test
+admin
+test.*
+data.txt
+p.txt
+
+.settings.ini
+settings.ini
