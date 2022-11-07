@@ -4,8 +4,8 @@ from handlers.setup import main_check
 
 
 def main():
-    main_check()
-    process = UserInp()
+    os, data = main_check()
+    process = UserInp(os, data)
     process.run()
 
 

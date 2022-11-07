@@ -3,12 +3,14 @@ from .myos import (
 )
 from .myexcept import (
     KillException as ex,
-    OsException
+    OsException,
+    ConfigException,
 )
-from .dirs import (
+from .filemanage import (
     create_folder,
     create_file,
-    load_file,
+    load_f_list,
+    save_f_list,
 )
 
 from .clipb import (

@@ -1,12 +1,18 @@
+from os.path import (
+    exists,
+)
 from core import (
     ex,
     get_os,
     write,
 )
+from cryp import (
+    create_key,
+)
 
 
 class UserInp:
-    def __init__(self):
+    def __init__(self, os, data):
         self.bug_rep = True
         self.progrun = False
         self.commands = {
@@ -21,6 +27,9 @@ class UserInp:
             'view': self.view,
             'newpass': self.create_pass,
         }
+
+        self.os = os
+        self.data = data
 
     def run(self):
         self.progrun = True
@@ -105,7 +114,61 @@ class UserInp:
     # ! Главное ===============================================================
     def init(self):
         """Инизиализирует базу паролей"""
-        return 1 / 0
+        key = bytes()
+        new_data = []
+
+        # ! Создание ключа
+        print('Для шифрования данных требуется ключ шифрования.')
+        inp = input('Он у вас есть? [Y - да / n - нет]')
+        if inp == 'n':
+            while True:
+                try_key = create_key()
+                print(
+                    f'Предлагаю ключ:\n{key}\n'
+                )
+                gener = input(
+                    'Оставляем таким [Y], сгенерировать новый [n]' +
+                    'или выйти режима создания [STOP]?'
+                )
+                if gener == 'Y':
+                    key = try_key
+                    break
+                elif gener == 'n':
+                    continue
+                elif gener == 'STOP':
+                    return None
+        inp = input(
+            'Приложению сохранять клуч?' +
+            'Рекомендуется НЕ сохранять данные по расположению ключа,' +
+            'но при дальнейшем использовании придется самостоятельно' +
+            'указывать расположения файла с ключем.\n' +
+            '[Y / n]\n'
+        )
+        if inp == 'Y':
+            while True:
+                way = input('Введите место хранения ключа:\n')
+                if not exists(way):
+                    print('Такого пути не существует')
+                    continue
+                else:
+                    break
+            fold = input('Введите название папки, где будет храниться ключ:\n')
+            # TODO: Доделать отслеживание ошибки
+        elif inp == 'n':
+            with open('pypass.key', 'wb') as f:
+                f.write(key)
+            del key
+            print(
+                'Файл сохранен в директории с приложением "pypass.key"' +
+                'ОБЯЗАТЕЛЬНО! Переместите его в другую директорию или флешку'
+            )
+
+        # ! Создание базы паролей
+        inp = input('Введите путь где сохранить базу паролей:\n')
+        fold = input(
+            'Введите название папки' +
+            'Внимание! Папка будет скрыта для обычных пользователей'
+        )
 
     def delete(self):
         """Удаляет базу паролей и приложения"""

@@ -81,26 +81,24 @@ def create_file(
         return False
 
 
-def load_file(name: str):
+def load_f_list(name: str, clean: bool = True) -> list:
     try:
         with open(name, 'r') as f:
-            return f
+            data = f.readlines()
+        if clean:
+            data = list(map(lambda x: x.replace('\n', ''), data))
+        return data
     except FileNotFoundError:
-        return None
+        print(f'Ошибка в пути файла {name}')
+        return False
 
 
-def win_hide_file(name: str):
-    from win32con import (
-        FILE_ATTRIBUTE_HIDDEN,
-    )
-    from win32api import (
-        SetFileAttributes,
-    )
-
+def save_f_list(name: str, data: list) -> bool:
     try:
-        SetFileAttributes(name, FILE_ATTRIBUTE_HIDDEN)
+        with open(name, 'w') as f:
+            data = '\n'.join(data)
+            f.write(data)
         return True
     except FileNotFoundError:
-        return False
-    else:
+        print(f'Ошибка в пути файла {name}')
         return False
