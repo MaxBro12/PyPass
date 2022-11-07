@@ -10,3 +10,7 @@ from .dirs import (
     create_file,
     load_file,
 )
+
+from .clipb import (
+    write,
+)

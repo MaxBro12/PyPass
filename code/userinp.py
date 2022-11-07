@@ -1,6 +1,7 @@
 from core import (
     ex,
     get_os,
+    write,
 )
 
 
@@ -98,6 +99,8 @@ class UserInp:
                 raise ex
             case 'os':
                 print(get_os())
+            case 'copy':
+                write('Hello fuckers!')
 
     # ! Главное ===============================================================
     def init(self):
