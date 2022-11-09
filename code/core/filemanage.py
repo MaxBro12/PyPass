@@ -81,6 +81,7 @@ def create_file(
         return False
 
 
+# ! Работа с файлами через список
 def load_f_list(name: str, clean: bool = True) -> list:
     try:
         with open(name, 'r') as f:
@@ -102,3 +103,35 @@ def save_f_list(name: str, data: list) -> bool:
     except FileNotFoundError:
         print(f'Ошибка в пути файла {name}')
         return False
+
+
+# ! Обработчики стандартных библиотек
+def not_exict_check(msg: str):
+    while True:
+        way = input(msg + '\n')
+        if not exists(way):
+            print(f'Путь не найден.\n{way}\nПроверьте путь!')
+            if input('Попробовать еще раз? [Y - n]\n') == 'Y':
+                continue
+            else:
+                return False
+        break
+    return way
+
+
+def exict_check(msg: str):
+    while True:
+        way = input(msg + '\n')
+        if exists(way):
+            print(f'Путь уже существует.\n{way}')
+            if input('Попробовать еще раз? [Y - n]\n') == 'Y':
+                continue
+        else:
+            return way
+            break
+
+
+def waymaker(args: list):
+    for arg in args:
+        if exists(arg):
+            pass

@@ -1,6 +1,7 @@
 from cryptography.fernet import (
     Fernet,
 )
+from getpass import getpass
 
 
 def encrypt(data: str, key: bytes) -> bytes:
@@ -9,3 +10,7 @@ def encrypt(data: str, key: bytes) -> bytes:
 
 def decrypt(data: bytes, key: bytes) -> str:
     return Fernet(key).decrypt(data).decode('UTF-8')
+
+
+def passinp(msg: str):
+    return getpass(msg)

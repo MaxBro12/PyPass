@@ -7,4 +7,5 @@ from .keys import (
 from .crypo import (
     encrypt,
     decrypt,
+    passinp,
 )

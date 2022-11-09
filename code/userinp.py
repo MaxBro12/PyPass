@@ -1,10 +1,18 @@
+from os import (
+    mkdir,
+)
 from os.path import (
     exists,
+    join,
 )
+
 from core import (
     ex,
     get_os,
     write,
+    save_f_list,
+    not_exict_check,
+    exict_check,
 )
 from cryp import (
     create_key,
@@ -20,7 +28,6 @@ class UserInp:
             'help': self.help,
             'stop': self.stop,
             'init': self.init,
-            'delete': self.delete,
             'add': self.add,
             'remove': self.remove,
             'list': self.list,
@@ -119,41 +126,45 @@ class UserInp:
 
         # ! Создание ключа
         print('Для шифрования данных требуется ключ шифрования.')
-        inp = input('Он у вас есть? [Y - да / n - нет]')
+        inp = input('У вас есть ключ? [Y - да / n - нет]\n')
         if inp == 'n':
             while True:
                 try_key = create_key()
-                print(
-                    f'Предлагаю ключ:\n{key}\n'
-                )
-                gener = input(
-                    'Оставляем таким [Y], сгенерировать новый [n]' +
-                    'или выйти режима создания [STOP]?'
-                )
-                if gener == 'Y':
+                print(f'Предлагаю ключ:\n{try_key}\n')
+                ans = input('Оставляем таким [Y] или создать новый [n]\n')
+                if ans == 'Y':
                     key = try_key
+                    del try_key
                     break
-                elif gener == 'n':
+                elif ans == 'n':
                     continue
-                elif gener == 'STOP':
-                    return None
+
+        # ! Сохранение ключа
         inp = input(
-            'Приложению сохранять клуч?' +
-            'Рекомендуется НЕ сохранять данные по расположению ключа,' +
-            'но при дальнейшем использовании придется самостоятельно' +
-            'указывать расположения файла с ключем.\n' +
-            '[Y / n]\n'
+            'Приложению сохранить ключ? [Y - да / n - нет]\n' +
+            'Рекомендуется НЕ сохранять данные по расположению ключа\n'
         )
         if inp == 'Y':
-            while True:
-                way = input('Введите место хранения ключа:\n')
-                if not exists(way):
-                    print('Такого пути не существует')
-                    continue
-                else:
-                    break
-            fold = input('Введите название папки, где будет храниться ключ:\n')
-            # TODO: Доделать отслеживание ошибки
+            way = not_exict_check('Введите путь, где сохранить папку:')
+            if not way:
+                return None
+            folder = exict_check('Введите название папки, где сохранить ключ:')
+            if not folder:
+                return None
+            way = join(way, folder)
+            mkdir(way)
+            if self.os == 'win':
+                from core.mypywindow import win_hide_file
+                win_hide_file(way)
+                with open(join(way, 'pypass.key'), 'wb') as f:
+                    f.write(key)
+                del key
+            elif self.os == 'linux':
+                # TODO: НЕ РАБОТАЕТ!!!
+                return False
+                from core.mypylinux import lin_hide_file
+                lin_hide_file(way)
+            self.data[0] = way
         elif inp == 'n':
             with open('pypass.key', 'wb') as f:
                 f.write(key)
@@ -164,11 +175,39 @@ class UserInp:
             )
 
         # ! Создание базы паролей
-        inp = input('Введите путь где сохранить базу паролей:\n')
-        fold = input(
+        way = not_exict_check('Введите путь где сохранить базу паролей:\n')
+        if not way:
+            return None
+        folder = exict_check(
             'Введите название папки' +
             'Внимание! Папка будет скрыта для обычных пользователей'
         )
+        if not folder:
+            return None
+        way = join(way, folder)
+        mkdir(way)
+        if self.os == 'win':
+            from core.mypywindow import win_hide_file
+            win_hide_file(way)
+        elif self.os == 'linux':
+            # TODO: НЕ РАБОТАЕТ!!!
+            return False
+            from core.mypylinux import lin_hide_file
+            lin_hide_file(way)
+        self.data[1] = way
+        if self.os == 'win':
+            from core.mypywindow import win_hide_file, win_show_file
+            from handlers.settings import win_conf_name
+            win_show_file(win_conf_name)
+            save_f_list(win_conf_name, self.data)
+            win_hide_file(win_conf_name)
+        elif self.os == 'linux':
+            from core.mypylinux import lin_hide_file  # , win_show_file
+            from handlers.settings import lin_conf_name
+            # win_show_file(lin_conf_name)
+            save_f_list(lin_conf_name, self.data)
+            win_hide_file(lin_conf_name)
+        print('Все готово! Добавьте пароль через команду "add"')
 
     def delete(self):
         """Удаляет базу паролей и приложения"""
