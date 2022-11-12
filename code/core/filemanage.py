@@ -1,5 +1,6 @@
 from os import (
     mkdir,
+    makedirs,
 )
 from os.path import (
     join,
@@ -105,6 +106,10 @@ def save_f_list(name: str, data: list) -> bool:
         return False
 
 
+def load_b_file(way: str):
+    return open(way, 'rb').read()
+
+
 # ! Обработчики стандартных библиотек
 def not_exict_check(msg: str):
     while True:
@@ -131,7 +136,12 @@ def exict_check(msg: str):
             break
 
 
-def waymaker(args: list):
-    for arg in args:
-        if exists(arg):
-            pass
+def waymaker(args: list, content):
+    """Создает директорию и файл в режиме 'wb'"""
+    print(args)
+    way = join(*args[:-1])
+    print(way)
+    if not exists(way):
+        makedirs(way)
+    with open(join(way, args[-1]), 'wb') as f:
+        f.write(content)

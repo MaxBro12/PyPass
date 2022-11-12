@@ -11,11 +11,17 @@ from core import (
     get_os,
     write,
     save_f_list,
+    load_b_file,
     not_exict_check,
     exict_check,
+    waymaker,
 )
 from cryp import (
     create_key,
+    load_key,
+    passinp,
+    encrypt,
+    decrypt,
 )
 
 
@@ -217,9 +223,26 @@ class UserInp:
     def create_pass(self, args: list = None):
         pass
 
-    def add(self):
-        """Добавляет в базу """
-        pass
+    def load_key(self, args: list = None):
+        """Загрузить ключ"""
+        way = ''
+        if args is None:
+            way = not_exict_check('Введите расположение ключа:')
+        else:
+            way = args[0]
+        self.data[0] = way
+
+    def add(self, args: list = None):
+        """Добавляет в базу"""
+        if self.data[0] == '':
+            self.load_key()
+        if args is None:
+            args = input('Введите метки сохранений через пробел:')
+            args = args.split(' ')
+        args[-1] = args[-1] + '.txt'
+        args = [self.data[1], *args]
+        passw = input('Введите пароль:\n')
+        waymaker(args, encrypt(passw, load_key(self.data[0])))
 
     def remove(self):
         pass
