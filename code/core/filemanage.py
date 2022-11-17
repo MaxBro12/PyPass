@@ -1,6 +1,7 @@
 from os import (
     mkdir,
     makedirs,
+    walk
 )
 from os.path import (
     join,

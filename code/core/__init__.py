@@ -18,5 +18,5 @@ from .filemanage import (
 )
 
 from .clipb import (
-    write,
+    write_to_cb,
 )

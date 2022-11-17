@@ -1,5 +1,6 @@
 from os import (
     mkdir,
+    remove,
 )
 from os.path import (
     exists,
@@ -9,7 +10,7 @@ from os.path import (
 from core import (
     ex,
     get_os,
-    write,
+    write_to_cb,
     save_f_list,
     load_b_file,
     not_exict_check,
@@ -19,9 +20,9 @@ from core import (
 from cryp import (
     create_key,
     load_key,
-    passinp,
     encrypt,
     decrypt,
+    passinp,
 )
 
 
@@ -30,15 +31,14 @@ class UserInp:
         self.bug_rep = True
         self.progrun = False
         self.commands = {
-            'pypass': self.pypass,
+            'admin': self.pypass,
             'help': self.help,
             'stop': self.stop,
             'init': self.init,
             'add': self.add,
-            'remove': self.remove,
+            'del': self.remove,
             'list': self.list,
-            'view': self.view,
-            'newpass': self.create_pass,
+            'show': self.view,
         }
 
         self.os = os
@@ -55,13 +55,18 @@ class UserInp:
             self.user_input()
 
     def start_message(self):
-        print('Use "help" command for more info')
+        print('Введите "help" для получения помощи.')
 
     def help_message(self):
         print(
-            'Hi! This app is using my consol engine.\n' +
-            'Use "help list" (or "l") for show all commands' +
-            ' or "help and name of command" for info about command'
+            'Приветствую!\nЭто приложение хранит ваши пароли,' +
+            ' хэшируя их и сохраняя на устройстве.\n' +
+            'Чтобы узнать все комманды, введите "help l".\n' +
+            'Для запуска базы данных используется комманда "init"\n' +
+            'Комманды (add, del, show) поддерживают доп. ввод:\n' +
+            'Например: "add пароли телеграм" пропустит шаг ввода меток' +
+            'и перейдет сразу в момент ввода пароля.' +
+            ' В момент ввода пароля он спрятан при вводе.'
         )
 
     def user_input(self):
@@ -85,15 +90,15 @@ class UserInp:
                     print(error)
                 self.user_input()
         else:
-            print(f'Unknown command: "{com}"')
+            print(f'Неизвестная комманда: "{com}"')
 
     def help(self, adt=None):
-        '''Use 'help' command if '''
+        '''Используйте эту комманду для получени помощи'''
         if adt is None:
             self.help_message()
         elif adt[0] in ('list', 'l'):
             print(adt[0])
-            print('List of all commands:')
+            print('Список всех комманд:')
             for command in self.commands:
                 if command == 'pypass':
                     continue
@@ -105,7 +110,11 @@ class UserInp:
                     if com in self.commands:
                         print(f'Docs {com}:\n\t{self.commands[com].__doc__}')
                     else:
-                        print(f'Unknown command {com}, use "help l" command')
+                        print(
+                            f'Неизвестная комманда {com},' +
+                            'используйте "help l"' +
+                            'для получения списка всех комманд'
+                        )
                 except Exception as error:
                     print(error)
                     self.user_input()
@@ -122,7 +131,7 @@ class UserInp:
             case 'os':
                 print(get_os())
             case 'copy':
-                write('Hello fuckers!')
+                write_to_cb('Hello!')
 
     # ! Главное ===============================================================
     def init(self):
@@ -233,22 +242,51 @@ class UserInp:
         self.data[0] = way
 
     def add(self, args: list = None):
-        """Добавляет в базу"""
+        """Добавляет в базу пароль по введенным меткам"""
         if self.data[0] == '':
             self.load_key()
         if args is None:
-            args = input('Введите метки сохранений через пробел:')
+            args = input('Введите метки сохранений через пробел:\n')
             args = args.split(' ')
         args[-1] = args[-1] + '.txt'
         args = [self.data[1], *args]
-        passw = input('Введите пароль:\n')
+        passw = passinp('Введите пароль:')
         waymaker(args, encrypt(passw, load_key(self.data[0])))
 
-    def remove(self):
-        pass
+    def remove(self, args: list = None):
+        """Удаляет пароль по введенным меткам"""
+        if args is None:
+            args = input('Введите метки пароля:\n')
+            args = args.split(' ')
+        args[-1] = args[-1] + '.txt'
+        args = [self.data[1], *args]
+        args = join(*args)
+
+        if input('Вы уверены? [Y - n]\n') == 'Y':
+            remove(args)
+        else:
+            print('Отмена удаления')
 
     def list(self):
-        pass
+        """Выводит список всех сохраненых меток"""
+        if self.os == 'win':
+            from core.mypywindow import wayfinder
+            dirs = wayfinder(self.data[1])
+            print('Метки сохранений:')
+            for i in dirs:
+                i = ' '.join(i)
+                print(i)
 
-    def view(self):
-        pass
+    def view(self, args: list = None):
+        """Выводит запрошенный пароль, а так же копирует это в буфер обмена"""
+        if args is None:
+            args = input('Введите метки пароля:\n')
+            args = args.split(' ')
+        args[-1] = args[-1] + '.txt'
+        args = [self.data[1], *args]
+        args = join(*args)
+
+        if self.data[0] == '':
+            self.load_key()
+
+        print(write_to_cb(decrypt(load_b_file(args), load_key(self.data[0]))))
