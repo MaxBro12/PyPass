@@ -9,6 +9,7 @@ admin
 test.*
 data.txt
 p.txt
+patch.txt
 
 .settings.ini
 settings.ini
