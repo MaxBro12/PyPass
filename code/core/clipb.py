@@ -7,4 +7,4 @@ from pyperclip import (
 def write_to_cb(data: str) -> str:
     copy(data)
     paste()
-    return(data)
+    return data
