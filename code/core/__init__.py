@@ -1,11 +1,24 @@
 from .myos import (
-    get_os
+    get_os,
+    lin_show_file,
+    lin_hide_file,
+    lin_wayfinder,
+    win_hide_file,
+    win_show_file,
+    win_wayfinder,
 )
+
+from .tomlpack import (
+    read,
+    write,
+)
+
 from .myexcept import (
     KillException as ex,
     OsException,
     ConfigException,
 )
+
 from .filemanage import (
     create_folder,
     create_file,
@@ -19,4 +32,8 @@ from .filemanage import (
 
 from .clipb import (
     write_to_cb,
+)
+
+from .debug import (
+    create_log_file,
 )

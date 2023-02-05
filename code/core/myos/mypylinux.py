@@ -15,7 +15,16 @@ def lin_hide_file(name: str):
         return False
 
 
-def wayfinder(way: str):
+def lin_show_file(name: str):
+    try:
+        rename(name, name.removeprefix('.'))
+    except FileNotFoundError:
+        return False
+    else:
+        return False
+
+
+def lin_wayfinder(way: str):
     ways = []
     for address, dirs, files in walk(way):
         for name in files:

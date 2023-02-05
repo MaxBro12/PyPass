@@ -36,7 +36,7 @@ def win_show_file(name: str):
         return False
 
 
-def wayfinder(way: str):
+def win_wayfinder(way: str):
     ways = []
     for address, dirs, files in walk(way):
         for name in files:
