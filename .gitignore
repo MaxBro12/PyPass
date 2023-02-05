@@ -11,6 +11,6 @@ data.txt
 p.txt
 patch.txt
 
-.settings.ini
-settings.ini
+.settings.toml
+settings.toml
 error.log

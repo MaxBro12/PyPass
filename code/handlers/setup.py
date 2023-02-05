@@ -2,7 +2,7 @@ from os.path import (
     exists,
 )
 
-from ..core import (
+from core import (
     get_os,
     OsException,
     ConfigException,
@@ -28,7 +28,9 @@ def main_check():
     # ! Обработка ошибки файла конфига
     if not data:
         raise ConfigException
-    return os, data
+
+    data['os'] = os
+    return data
 
 
 def win_init() -> dict:
@@ -38,7 +40,7 @@ def win_init() -> dict:
             win_set_conf,
         )
     if not exists(win_conf_name):
-        from ..core import (
+        from core import (
             win_hide_file,
         )
         write(win_set_conf, win_conf_name)

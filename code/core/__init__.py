@@ -14,7 +14,6 @@ from .tomlpack import (
 )
 
 from .myexcept import (
-    KillException as ex,
     OsException,
     ConfigException,
 )

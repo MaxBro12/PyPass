@@ -1,11 +1,11 @@
-from userinp import UserInp
-from core.debug import create_log_file
-from handlers.setup import main_check
+from myengine import UserInp
+from core import create_log_file
+from handlers import main_check
 
 
 def main():
-    os, data = main_check()
-    process = UserInp(os, data)
+    config_dict = main_check()
+    process = UserInp(config_dict)
     process.run()
 
 
