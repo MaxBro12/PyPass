@@ -20,13 +20,7 @@ class UserInp:
 
         # ? Загружаем языковую базу
         self.lang = None
-        match self.config['lang']:
-            case 'ru':
-                self.lang = ru
-            case 'en':
-                self.lang = en
-            case _:
-                self.lang = ru
+        self.change_lang()
 
         # ? Настройки запуска
         self.progrun = False
@@ -36,32 +30,26 @@ class UserInp:
             'admin': self.admin,
             'help': self.help,
             'stop': self.stop,
+            'config': self.config_manage,
             'hello': self.hello,
         }
 
+    # ! Основные команды
     def run(self):
         self.progrun = True
 
-        # ! Вывод приветстренного сообщения
+        # ? Вывод приветстренного сообщения
         self.start_message()
 
-        # ! Главный цикл программы
+        # ? Главный цикл программы
         while self.progrun:
             self.user_input()
 
-    def start_message(self):
-        print(self.lang['startm'])
-
-    def help_message(self):
-        print(
-            self.lang['helpm']
-        )
-
     def user_input(self):
-        '''
+        """
         Метод пользовательского ввода.
         Запускает набранную команду из списка команд.
-        '''
+        """
         word = str(input(': ')).split()
         com = word[0]
         if com in self.commands:
@@ -81,12 +69,12 @@ class UserInp:
             print(f'{self.lang["uncom"]}"{com}"')
 
     def help(self, adt=None):
-        '''Use 'help' command if '''
+        """Команда помощи"""
         if adt is None:
             self.help_message()
         elif adt[0] in ('list', 'l'):
             print(adt[0])
-            print('List of all commands:')
+            print(self.lang['helpl'])
             for command in self.commands:
                 print(f'\t{command} - {self.commands[command].__doc__}')
         else:
@@ -102,13 +90,41 @@ class UserInp:
                     self.user_input()
 
     def stop(self):
-        '''Stopping user input'''
+        """Останавливает пользовательский ввод"""
         self.progrun = False
 
     def admin(self, args: list):
+        """Специальные команды для администратора"""
         match args[0]:
             case 'kill':
                 raise KillException
+
+    def change_lang(self):
+        """Перезагружает языковой пакет"""
+        match self.config['lang']:
+            case 'ru':
+                self.lang = ru
+            case 'en':
+                self.lang = en
+            case _:
+                self.lang = ru
+
+    def config_manage(self):
+        """Режим изменения настроек"""
+        print(self.lang['confs'])
+        for index, i in enumerate(self.config):
+            print(f'-> {i} : {self.config[i]}')
+
+    # ? Сообщения помощи и старта
+    def start_message(self):
+        """Вывод стартового сообщения"""
+        print(self.lang['startm'])
+
+    def help_message(self):
+        """Вывод сообщения помощи"""
+        print(
+            self.lang['helpm']
+        )
 
     # ? =============== Функции =================
     '''

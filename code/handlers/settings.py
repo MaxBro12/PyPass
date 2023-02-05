@@ -1,5 +1,6 @@
 win_conf_name = 'settings.toml'
 win_set_conf = {
+    'os': '',
     'debug': True,
     'lang': 'ru',
     'key': '',
@@ -8,6 +9,7 @@ win_set_conf = {
 
 lin_conf_name = '.settings.toml'
 lin_set_conf = {
+    'os': '',
     'debug': True,
     'lang': 'ru',
     'key': '',
