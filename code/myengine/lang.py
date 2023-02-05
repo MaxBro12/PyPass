@@ -5,6 +5,8 @@ ru = {
     'uncom': 'Неизвестная команда: ',
     'incorectm': 'Неправильная команда!',
     'confs': 'Настройка конфигурации:',
+    'confselect': 'Введите название параметра, который хотите изменить\n(чтобы пропустить нажмите enter)\n-> ',
+    'confnew': 'Введите новое значение параметра:\n-> ',
 }
 
 en = {
@@ -14,4 +16,6 @@ en = {
     'uncom': 'Unknown command: ',
     'incorectm': 'Wrong command!',
     'confs': 'Configurate settings:',
+    'confselect': 'Enter the name of the parameter you want to change\n(press enter to skip)\n-> ',
+    'confnew': 'Enter a new parameter value:\n-> ',
 }

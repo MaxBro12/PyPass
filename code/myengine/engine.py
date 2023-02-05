@@ -6,8 +6,8 @@ from .excep import (
     KillException,
 )
 from .eng_settings import (
-    possitive_val,
-    negative_val,
+    confirmation,
+    rejection,
 )
 
 
@@ -120,6 +120,14 @@ class UserInp:
             print(
                 f': [{index}] {i}{" " * (10 - len(str(i)))}-> {self.config[i]}'
             )
+        while True:
+            param = input(self.lang['confselect'])
+            if param == '':
+                break
+            else:
+                new_val = input(self.lang['confnew'])
+                self.config[param] = new_val
+                self.change_lang()
         # ! Сюда подключить метод сохранения конфигурации
         # ! Например использовать мой tomlpack
 
