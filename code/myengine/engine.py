@@ -5,6 +5,10 @@ from .lang import (
 from .excep import (
     KillException,
 )
+from .eng_settings import (
+    possitive_val,
+    negative_val,
+)
 
 
 emp_conf = {
@@ -61,14 +65,14 @@ class UserInp:
                 else:
                     return command()
             except TypeError as error:
-                print('Wrong command!')
-                if self.bug_rep:
+                print(self.lang['incorectm'])
+                if self.config['debug']:
                     print(error)
                 self.user_input()
         else:
             print(f'{self.lang["uncom"]}"{com}"')
 
-    def help(self, adt=None):
+    def help(self, adt=None):  # TODO: ПЕРЕДЕЛАТЬ СООБЩЕНИЕ
         """Команда помощи"""
         if adt is None:
             self.help_message()
@@ -113,7 +117,11 @@ class UserInp:
         """Режим изменения настроек"""
         print(self.lang['confs'])
         for index, i in enumerate(self.config):
-            print(f'-> {i} : {self.config[i]}')
+            print(
+                f': [{index}] {i}{" " * (10 - len(str(i)))}-> {self.config[i]}'
+            )
+        # ! Сюда подключить метод сохранения конфигурации
+        # ! Например использовать мой tomlpack
 
     # ? Сообщения помощи и старта
     def start_message(self):
@@ -126,7 +134,7 @@ class UserInp:
             self.lang['helpm']
         )
 
-    # ? =============== Функции =================
+    # ! =============== Пользовательские методы ===============================
     '''
     Для стабильной работы команда (она же является методом класса) должна:
     1) Иметь документацию. Именно она выписывается как описание
