@@ -131,7 +131,10 @@ class UserInp:
     def update_conf(self):
         "Обновление корфигурации интерфейса и сохранение его настроек"
         # ! Сохранение конфига
-        write(self.config, '.settings.toml' if self.config['os'] == 'linux' else 'settings.toml')
+        if self.config['os'] == 'win':
+            write(self.config, 'settings.toml')
+        elif self.config['os'] == 'linux':
+            write(self.config, '.settings.toml')
         self.change_lang()
         print(self.lang['updateconf'])
 
@@ -162,6 +165,8 @@ class UserInp:
                     new_val = input(self.lang['confnew'])
                     if type(self.config[param]) is int:
                         new_val = int(new_val)
+                    elif type(self.config[param]) is str:
+                        new_val = str(new_val)
                     elif type(self.config[param]) is float:
                         new_val = float(new_val)
                     elif type(self.config[param]) is bool:
@@ -174,6 +179,8 @@ class UserInp:
                             continue
                     else:
                         print(self.lang['confincor'])
+                        if self.config['debug']:
+                            print(type(self.config[param]))
                         continue
                     self.config[param] = new_val
                 else:
