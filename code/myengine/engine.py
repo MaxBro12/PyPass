@@ -18,7 +18,7 @@ emp_conf = {
 
 
 class UserInp:
-    def __init__(self, config: dict = emp_conf):
+    def __init__(self, config: dict = emp_conf, args: list = None):
         # ? Загружаем конфиг файл в формате словаря
         self.config = config
 
@@ -38,6 +38,10 @@ class UserInp:
             'hello': self.hello,
         }
 
+        # ! Запуск в режиме 1 команды
+        if args is not None:
+            self.run_only_arg(args)
+
     # ! Основные команды
     def run(self):
         self.progrun = True
@@ -49,12 +53,32 @@ class UserInp:
         while self.progrun:
             self.user_input()
 
+    def run_only_arg(self, args: list):
+        """Запуск определенного действия без запуска всего интерфейса"""
+        word = args[0]
+        if word in self.commands:
+            word = self.commands[word]
+            try:
+                if len(args) > 1:
+                    addition = args[1::]
+                    return word(addition)
+                else:
+                    return word()
+            except TypeError as error:
+                print(self.lang['incorectm'])
+                if self.config['debug']:
+                    print(error)
+        else:
+            print(f'{self.lang["uncom"]}"{word}"')
+
     def user_input(self):
         """
         Метод пользовательского ввода.
         Запускает набранную команду из списка команд.
         """
         word = str(input(': ')).split()
+        if word == []:
+            return self.user_input()
         com = word[0]
         if com in self.commands:
             command = self.commands[com]
@@ -68,30 +92,25 @@ class UserInp:
                 print(self.lang['incorectm'])
                 if self.config['debug']:
                     print(error)
-                self.user_input()
+                return self.user_input()
         else:
             print(f'{self.lang["uncom"]}"{com}"')
 
-    def help(self, adt=None):  # TODO: ПЕРЕДЕЛАТЬ СООБЩЕНИЕ
-        """Команда помощи"""
+    def help(self, adt=None):
+        """Вывод сообщения о помощи"""
+        def printer(com: str):
+            print(f'[{com}] -> {self.lang[com]}')
         if adt is None:
             self.help_message()
-        elif adt[0] in ('list', 'l'):
-            print(adt[0])
-            print(self.lang['helpl'])
-            for command in self.commands:
-                print(f'\t{command} - {self.commands[command].__doc__}')
+        elif adt[0] in ('l', 'list'):
+            for com in self.commands:
+                if com == 'admin':
+                    continue
+                printer(com)
         else:
             for com in adt:
-                try:
-                    com = str(com)
-                    if com in self.commands:
-                        print(f'Docs {com}:\n\t{self.commands[com].__doc__}')
-                    else:
-                        print(f'Unknown command {com}, use "help l" command')
-                except Exception as error:
-                    print(error)
-                    self.user_input()
+                if com in self.commands.values():
+                    printer(com)
 
     def stop(self):
         """Останавливает пользовательский ввод"""
@@ -102,6 +121,17 @@ class UserInp:
         match args[0]:
             case 'kill':
                 raise KillException
+            case 'update':
+                self.update_conf()
+
+    def update_conf(self):
+        "Обновление корфигурации интерфейса и сохранение его настроек"
+        # ! Сюда подключить метод сохранения конфигурации в файл
+        # ! Например использовать мой tomlpack
+        # ! Connect the method for saving the configuration to a file here
+        # ! For example use my tomlpack
+        self.change_lang()
+        print(self.lang['updateconf'])
 
     def change_lang(self):
         """Перезагружает языковой пакет"""
@@ -125,11 +155,13 @@ class UserInp:
             if param == '':
                 break
             else:
-                new_val = input(self.lang['confnew'])
-                self.config[param] = new_val
-                self.change_lang()
-        # ! Сюда подключить метод сохранения конфигурации
-        # ! Например использовать мой tomlpack
+                if param in self.config.values():
+                    new_val = input(self.lang['confnew'])
+                    self.config[param] = new_val
+                else:
+                    print(self.lang['confnotfound'])
+                    continue
+        self.update_conf()
 
     # ? Сообщения помощи и старта
     def start_message(self):
@@ -142,7 +174,7 @@ class UserInp:
             self.lang['helpm']
         )
 
-    # ! =============== Пользовательские методы ===============================
+    # ! === Пользовательские методы === Custom Methods ========================
     '''
     Для стабильной работы команда (она же является методом класса) должна:
     1) Иметь документацию. Именно она выписывается как описание
@@ -165,5 +197,6 @@ class UserInp:
     вывод же может быть любым языком.
     '''
 
-    def hello(self, args):
+    def hello(self, args: list = ['']):
+        """Выводит 'Hello, world!'"""
         print(f'Hello, world! {args[0]}')
