@@ -31,6 +31,8 @@ class UserInp:
 
         # ? Настройки запуска
         self.progrun = False
+        self.confirm = confirmation
+        self.reject = rejection
 
         # ? Список команд
         self.commands = {
