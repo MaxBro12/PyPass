@@ -11,12 +11,12 @@ ru = {
     'confselect': 'Введите название параметра, который хотите изменить\n(чтобы пропустить нажмите enter)\n-> ',
     'confnew': 'Введите новое значение параметра:\n-> ',
     'confnotfound': 'Данного параметра не существует',
+    'confincor': 'Данный тип не поддерживается',
     # Команды
     'admin': 'для работы администратора',
     'help': 'вывод справки, используйте "help l" для вывода всех команд',
     'stop': 'останавливает работу приложения',
     'config': 'открытие настроек',
-    'hello': 'вывод "Hello world"',
 }
 
 en = {
@@ -32,10 +32,10 @@ en = {
     'confselect': 'Enter the name of the parameter you want to change\n(press enter to skip)\n-> ',
     'confnew': 'Enter a new parameter value:\n-> ',
     'confnotfound': 'This parameter does not exist',
+    'confincor': 'This type is not supported',
     # Commands
     'admin': 'only for admin work',
     'help': 'help output, use "help l" to list all commands',
     'stop': 'stops the application',
     'config': 'open settings',
-    'hello': 'output "Hello world"',
 }

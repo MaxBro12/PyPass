@@ -1,13 +1,15 @@
-from myengine import UserInp
 from core import create_log_file
-from handlers import main_check
+from handlers import (
+    main_check,
+    Program,
+)
 
 from sys import argv
 
 
 def main(args: list = None):
     config_dict = main_check()
-    process = UserInp(config_dict, args)
+    process = Program(config_dict, args)
     if args is None:
         process.run()
 

@@ -8,11 +8,6 @@ from .myos import (
     win_wayfinder,
 )
 
-from .tomlpack import (
-    read,
-    write,
-)
-
 from .myexcept import (
     OsException,
     ConfigException,
@@ -35,4 +30,10 @@ from .clipb import (
 
 from .debug import (
     create_log_file,
+)
+
+from .myengine import (
+    UserInp,
+    read,
+    write,
 )

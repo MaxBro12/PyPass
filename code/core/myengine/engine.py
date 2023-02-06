@@ -10,6 +10,9 @@ from .eng_settings import (
     rejection,
 )
 
+from .tomlreader import (
+    write,
+)
 
 emp_conf = {
     'debug': True,
@@ -35,7 +38,6 @@ class UserInp:
             'help': self.help,
             'stop': self.stop,
             'config': self.config_manage,
-            'hello': self.hello,
         }
 
         # ! Запуск в режиме 1 команды
@@ -109,7 +111,7 @@ class UserInp:
                 printer(com)
         else:
             for com in adt:
-                if com in self.commands.values():
+                if com in self.commands.keys():
                     printer(com)
 
     def stop(self):
@@ -126,10 +128,8 @@ class UserInp:
 
     def update_conf(self):
         "Обновление корфигурации интерфейса и сохранение его настроек"
-        # ! Сюда подключить метод сохранения конфигурации в файл
-        # ! Например использовать мой tomlpack
-        # ! Connect the method for saving the configuration to a file here
-        # ! For example use my tomlpack
+        # ! Сохранение конфига
+        write(self.config, '.settings.toml' if self.config['os'] == 'linux' else 'settings.toml')
         self.change_lang()
         print(self.lang['updateconf'])
 
@@ -155,8 +155,24 @@ class UserInp:
             if param == '':
                 break
             else:
-                if param in self.config.values():
+                print(f'-> {param} <-')
+                if param in self.config.keys():
                     new_val = input(self.lang['confnew'])
+                    if type(self.config[param]) is int:
+                        new_val = int(new_val)
+                    elif type(self.config[param]) is float:
+                        new_val = float(new_val)
+                    elif type(self.config[param]) is bool:
+                        if new_val == 'True':
+                            new_val = True
+                        elif new_val == 'False':
+                            new_val = False
+                        else:
+                            print(self.lang['confincor'])
+                            continue
+                    else:
+                        print(self.lang['confincor'])
+                        continue
                     self.config[param] = new_val
                 else:
                     print(self.lang['confnotfound'])
@@ -173,30 +189,3 @@ class UserInp:
         print(
             self.lang['helpm']
         )
-
-    # ! === Пользовательские методы === Custom Methods ========================
-    '''
-    Для стабильной работы команда (она же является методом класса) должна:
-    1) Иметь документацию. Именно она выписывается как описание
-    с использованием команды help
-    2) print - команды должны что-то выводить
-    3) args - аргументы в функции передаются одним списком
-    Пример:
-    Команда - help hello в виде интерпретатора выглядит
-    как метод help с единственным аргументом ['hello'] являющимся списком
-    Разделяется все пробелом:
-    help hello stop = self.help(self, ['hello', 'stop'])
-    Так же все что передается в аргумент является строкой!
-    4) Все команды должны быть в словаре self.commands:
-    ключ - слово как обращаться к функции
-    значение - метод
-    5) Названия команд не должны иметь в названии:
-    - пробел
-    - специальные символы, не все консоли могут их поддерживать
-    Рекомендуется для ввода использовать стандартные латинские символа,
-    вывод же может быть любым языком.
-    '''
-
-    def hello(self, args: list = ['']):
-        """Выводит 'Hello, world!'"""
-        print(f'Hello, world! {args[0]}')
