@@ -1,5 +1,0 @@
-win32con
-cryptography
-toml
-pyperclip
-logging

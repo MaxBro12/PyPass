@@ -1,16 +1,5 @@
 .vscode
 .idea
-.gitirnore
-
 __pycache__
+venv
 
-test
-admin
-test.*
-data.txt
-p.txt
-patch.txt
-
-.settings.toml
-settings.toml
-error.log

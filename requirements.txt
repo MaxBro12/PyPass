@@ -1,0 +1,5 @@
+cryptography
+pyperclip
+toml
+PySide6
+
