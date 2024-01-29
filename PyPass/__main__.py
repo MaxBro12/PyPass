@@ -2,7 +2,7 @@ from sys import argv, exit
 
 from PySide6.QtWidgets import QApplication
 
-from client import ErrorApp, MyAppMain
+from client import ErrorApp
 from core import create_log
 from start import main_check
 
@@ -12,7 +12,7 @@ def main(args: list):
     main_check()
     # ? Запуск приложения
     app = QApplication(args)
-    widget = MyAppMain()
+    widget = ErrorApp('Start')
     widget.show()
     exit(app.exec())
 

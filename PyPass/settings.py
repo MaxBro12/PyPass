@@ -3,6 +3,7 @@ from PySide6.QtCore import QSize
 
 
 # ! ОСНОВА
+ERROR_FOUND: Final = 'Найдена критическая ошибка! Отправьте файл "logger.log" разработчику'
 
 # ! ОКНА
 MAIN_APP_SIZE: Final = QSize(700, 500)

@@ -3,7 +3,7 @@ from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QIcon
 
 
-from settings import WARNING_APP_ICON
+#from settings import WARNING_APP_ICON
 
 
 class WarningApp(QDialog):
@@ -11,7 +11,7 @@ class WarningApp(QDialog):
         super().__init__()
         # ? Окно
         self.setWindowTitle('Warning!')
-        self.setWindowIcon(QIcon(WARNING_APP_ICON))
+        #self.setWindowIcon(QIcon(WARNING_APP_ICON))
         self.setBaseSize(QSize(200, 60))
 
         # ! Разметка
