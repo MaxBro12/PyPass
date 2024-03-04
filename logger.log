@@ -1,0 +1,17 @@
+2024-03-03 16:08:44,353 CRITICAL [Errno 2] Нет такого файла или каталога: 'settings.toml'
+Traceback (most recent call last):
+  File "/home/maxbro/code/_Projects/PyPass/PyPass/__main__.py", line 24, in <module>
+    main(argv)
+  File "/home/maxbro/code/_Projects/PyPass/PyPass/__main__.py", line 17, in main
+    widget = MainApp()
+             ^^^^^^^^^
+  File "/home/maxbro/code/_Projects/PyPass/PyPass/client/main_app/app.py", line 12, in __init__
+    self.config = read_toml(FILE_SETTINGS)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/maxbro/code/_Projects/PyPass/PyPass/core/filemanage/tomlreader.py", line 9, in read_toml
+    return dict(load(way))
+                ^^^^^^^^^
+  File "/home/maxbro/code/_Projects/PyPass/venv/lib/python3.12/site-packages/toml/decoder.py", line 133, in load
+    with io.open(_getpath(f), encoding='utf-8') as ffile:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] Нет такого файла или каталога: 'settings.toml'

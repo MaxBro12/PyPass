@@ -2,17 +2,19 @@ from sys import argv, exit
 
 from PySide6.QtWidgets import QApplication
 
-from client import ErrorApp
-from core import create_log
+from client import MainApp, ErrorApp
+from core import create_log, create_key
 from start import main_check
+
+
+app = QApplication([])
 
 
 def main(args: list):
     # ? Проверка
     main_check()
     # ? Запуск приложения
-    app = QApplication(args)
-    widget = ErrorApp('Start')
+    widget = MainApp()
     widget.show()
     exit(app.exec())
 

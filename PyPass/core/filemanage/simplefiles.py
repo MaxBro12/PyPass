@@ -32,6 +32,16 @@ def save_file(name: str, inner: str) -> bool:
         return False
 
 
+def save_file_bytes(name: str, inner: str | bytes) -> bool:
+    try:
+        with open(name, 'wb', encoding='utf-8') as f:
+            f.write(inner)
+            return True
+    except FileNotFoundError:
+        create_log(f'Файл {name} не найден')
+        return False
+
+
 def load_file(name: str) -> str:
     try:
         create_log(f'Load: {name}')
@@ -42,14 +52,14 @@ def load_file(name: str) -> str:
         return ''
 
 
-def load_file_bytes(name: str) -> str:
+def load_file_bytes(name: str) -> bytes:
     try:
         create_log(f'Load bytes: {name}')
-        with open(name, 'r', encoding='utf-8') as f:
+        with open(name, 'rb', encoding='utf-8') as f:
             return f.read()
     except FileNotFoundError:
         create_log(f'Файл {name} не найден')
-        return ''
+        return b''
 
 
 def rename_file(last_name: str, new_name: str) -> bool:

@@ -1,6 +1,7 @@
 from .simplefiles import (
     create_file,
     save_file,
+    save_file_bytes,
     rename_file,
     load_file,
     load_file_bytes,
@@ -27,6 +28,7 @@ from .path import (
 
 from .tomlreader import (
     read_toml,
+    read_toml_string,
     write_toml,
     update_dict_to_type,
     toml_type_check,

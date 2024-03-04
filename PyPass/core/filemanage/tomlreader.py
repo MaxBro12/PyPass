@@ -1,12 +1,16 @@
 from typing import Any, cast
 
-from toml import load, dump
+from toml import load, dump, loads, dumps
 from ..debug import create_log
 
 
 def read_toml(way: str) -> dict[str, Any]:
     """Считываем файл по пути way формата .toml и возвращаем словарь"""
     return dict(load(way))
+
+
+def read_toml_string(data: str) ->dict[str, Any]:
+    return dict(loads(data))
 
 
 def write_toml(dictionary, way: str):
