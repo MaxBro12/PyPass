@@ -19,6 +19,10 @@ def write_toml(dictionary, way: str):
         dump(dictionary, toml_file)
 
 
+def write_to_toml_str(dictionary) -> str:
+    return dumps(dictionary)
+
+
 def update_dict_to_type(dictionary: dict, type_to):
     """Обновляет словарь до выбранного типа"""
     return cast(type_to, dictionary)

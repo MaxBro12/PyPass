@@ -8,6 +8,7 @@ ERROR_FOUND: Final = 'Найдена критическая ошибка! Отп
 FILE_SETTINGS: Final = 'settings.toml'
 FILE_SETTINGS_KEY: Final = b'o_yl3RRwxwQCAqBlCncJR--fzxFxdrGV6aDqdqXH8yM='
 SETTINGS_IN: Final = {
+    'language': 'ru',
     'save_loc': True,
     'way_to_file': '',
     'way_to_key': '',

@@ -32,9 +32,9 @@ def save_file(name: str, inner: str) -> bool:
         return False
 
 
-def save_file_bytes(name: str, inner: str | bytes) -> bool:
+def save_file_bytes(name: str, inner: bytes) -> bool:
     try:
-        with open(name, 'wb', encoding='utf-8') as f:
+        with open(name, 'wb') as f:
             f.write(inner)
             return True
     except FileNotFoundError:
@@ -55,7 +55,7 @@ def load_file(name: str) -> str:
 def load_file_bytes(name: str) -> bytes:
     try:
         create_log(f'Load bytes: {name}')
-        with open(name, 'rb', encoding='utf-8') as f:
+        with open(name, 'rb') as f:
             return f.read()
     except FileNotFoundError:
         create_log(f'Файл {name} не найден')

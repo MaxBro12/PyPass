@@ -30,6 +30,7 @@ from .tomlreader import (
     read_toml,
     read_toml_string,
     write_toml,
+    write_to_toml_str,
     update_dict_to_type,
     toml_type_check,
 )
