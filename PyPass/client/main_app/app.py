@@ -14,6 +14,7 @@ from settings import (
     FILE_SETTINGS_KEY,
 )
 
+
 class MainApp(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
@@ -25,7 +26,12 @@ class MainApp(QMainWindow):
 
     # Главные методы
     def load_config(self):
-        self.config = read_toml_string(open_cryp_file_with_key(FILE_SETTINGS, FILE_SETTINGS_KEY))
+        self.config = read_toml_string(
+            open_cryp_file_with_key(FILE_SETTINGS, FILE_SETTINGS_KEY)
+        )
 
     def save_config(self):
-        save_cryp_file_with_key(FILE_SETTINGS, write_to_toml_str(self.config), FILE_SETTINGS_KEY)
+        save_cryp_file_with_key(
+            FILE_SETTINGS, write_to_toml_str(self.config), FILE_SETTINGS_KEY
+        )
+
