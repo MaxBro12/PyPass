@@ -9,3 +9,4 @@ def save_db(way: str, db: pd.DataFrame, way_to_key: str):
 
 def load_db(way: str, way_to_key: str):
     return pd.read_csv(StringIO(open_cryp_file(way, way_to_key)), sep=',')
+

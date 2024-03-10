@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow
+from PySide6.QtWidgets import QMainWindow, QFileDialog
 
 from .main_app_ui import MainAppUI
 from core import (
@@ -27,7 +27,8 @@ class MainApp(QMainWindow):
         self.setCentralWidget(self.main)
         
         # Подключаем кнопки
-        self.main
+        self.main.open_file_b.clicked.connect(lambda: self.open_file(True))
+        self.main.open_key_b.clicked.connect(lambda: self.open_file(False))
 
     # Главные методы
     def load_config(self):
@@ -41,7 +42,7 @@ class MainApp(QMainWindow):
         )
 
     def load_db(self):
-        pass
+        save_db(self.main.way_to_file.text(), '')
 
     def save_db(self):
         pass
@@ -49,3 +50,9 @@ class MainApp(QMainWindow):
     def update_table(self):
         pass
 
+    def open_file(self, type: bool):
+        way = QFileDialog.getOpenFileName(self, 'Open File', '', 'All Files ( * )')
+        if type:
+            self.main.way_to_file.setText(way[0])
+        else:
+            self.main.way_to_key.setText(way[0])
