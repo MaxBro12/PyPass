@@ -8,6 +8,8 @@ from core import (
     save_cryp_file,
     read_toml_string,
     write_to_toml_str,
+    save_db,
+    load_db,
 )
 from settings import (
     FILE_SETTINGS,
@@ -23,6 +25,9 @@ class MainApp(QMainWindow):
 
         self.main = MainAppUI(self.config['language'])
         self.setCentralWidget(self.main)
+        
+        # Подключаем кнопки
+        self.main
 
     # Главные методы
     def load_config(self):
@@ -34,4 +39,13 @@ class MainApp(QMainWindow):
         save_cryp_file_with_key(
             FILE_SETTINGS, write_to_toml_str(self.config), FILE_SETTINGS_KEY
         )
+
+    def load_db(self):
+        pass
+
+    def save_db(self):
+        pass
+
+    def update_table(self):
+        pass
 
