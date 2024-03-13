@@ -13,6 +13,7 @@ SETTINGS_IN: Final = {
     'way_to_file': '',
     'way_to_key': '',
 }
+NEW_KEY_FILE: Final = 'PyPassKey.pypass'
 
 
 # ! ОКНА
@@ -24,3 +25,5 @@ ALL_SPASING: Final = 2
 ALL_MARGINS: Final = QMargins(2, 2, 2, 2)
 
 SMALL_BUTTOMS_SIZE: Final = QSize(30, 30)
+
+SETTINGS_DIA_SIZE: Final = QSize(400, 150)

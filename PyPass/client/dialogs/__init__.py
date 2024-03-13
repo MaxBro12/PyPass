@@ -1,0 +1,1 @@
+from .new_key_dia import NewKeyGenDia

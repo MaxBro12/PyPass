@@ -34,4 +34,4 @@ from .cryp import (
 ) 
 
 from .exceptions import OsException, ConfigException
-from .database import load_db, save_db
+from .database import load_db, save_db, return_empty_bd
