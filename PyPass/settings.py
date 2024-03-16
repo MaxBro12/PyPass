@@ -14,6 +14,7 @@ SETTINGS_IN: Final = {
     'way_to_key': '',
 }
 NEW_KEY_FILE: Final = 'PyPassKey.pypass'
+NEW_DB_FILE: Final = 'Pandas.pypass'
 
 
 # ! ОКНА
