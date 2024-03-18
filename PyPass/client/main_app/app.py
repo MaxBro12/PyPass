@@ -2,6 +2,7 @@ import pandas as pd
 from PySide6.QtWidgets import (
     QMainWindow,
     QFileDialog,
+    QTableWidgetItem
 )
 from PySide6.QtCore import QAbstractTableModel, Qt
 
@@ -28,49 +29,37 @@ from settings import (
 )
 
 
-class TableModel(QAbstractTableModel):
+class PandasModel(QAbstractTableModel):
     def __init__(self, data: pd.DataFrame):
-        super(TableModel, self).__init__()
-        self._data = data
-
-    def data(self, index, role):
-        if role == Qt.DisplayRole:
-            # See below for the nested-list data structure.
-            # .row() indexes into the outer list,
-            # .column() indexes into the sub-list
-            return self._data[index.row()][index.column()]
+        super().__init__()
+        self.__data = data
 
     def rowCount(self, index):
-        # The length of the outer list.
-        return len(self._data)
+        return self.__data.shape[0]
 
     def columnCount(self, index):
-        # The following takes the first sub-list, and returns
-        # the length (only works if all rows are an equal length)
-        return len(self._data.columns)
+        return self.__data.shape[1]
 
+    def data(self, index, role):
+        if role == Qt.DisplayRole or role == Qt.EditRole:
+            return str(self.__data.iloc[index.row(), index.column()])
 
-class PandasModel(QAbstractTableModel):
-    def __init__(self, df, parent=None):
-        QAbstractTableModel.__init__(self, parent)
-        self.__dataframe = df
+    def setData(self, index, value, role):
+        if role == Qt.EditRole:
+            self.__data.iloc[index.row(), index.column()] = value
+            return True
+        return False
 
-    def rowCount(self, parent=None):
-        return len(self.__dataframe.index)
+    def headerData(self, section, orientation, role):
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
+                return str(self.__data.columns[section])
 
-    def columnCount(self, parent=None):
-        return len(self.__dataframe.columns)
+            if orientation == Qt.Vertical:
+                return str(self.__data.index[section])
 
-    def data(self, index, role=Qt.DisplayRole):
-        if index.isValid():
-            if role == Qt.DisplayRole:
-                return str(self.__dataframe.iloc[index.row(), index.column()])
-        return None
-
-    def headerData(self, col, orientation, role):
-        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
-            return self.__dataframe.columns[col]
-        return None
+    def flags(self, index):
+        return Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsEditable
 
 
 class MainApp(QMainWindow):
@@ -100,6 +89,7 @@ class MainApp(QMainWindow):
         )
 
     def save_config(self):
+        print('save db')
         save_cryp_file_with_key(
             FILE_SETTINGS, write_to_toml_str(self.config), FILE_SETTINGS_KEY
         )
@@ -112,7 +102,7 @@ class MainApp(QMainWindow):
 
     def generate_key(self):
         save_file_bytes(NEW_KEY_FILE, create_key())
-        save_db(NEW_DB_FILE, pd.DataFrame({'1':['New'], '2':['Password'],'3':['Data']}), NEW_KEY_FILE)
+        save_db(NEW_DB_FILE, pd.DataFrame({'Name':['New', 'test'], 'Login':['Password', 'test'],'Password':['Data', 'test']}), NEW_KEY_FILE)
         dia = NewKeyGenDia(None, NEW_KEY_FILE, self.config['language'])
         dia.exec()
         self.main.way_to_file.setText(NEW_DB_FILE)
@@ -127,8 +117,15 @@ class MainApp(QMainWindow):
 
     def update_table(self):
         df = self.load_db()
-        self.main.table.setModel(PandasModel(df))
-        self.main.table.model.setEditable(True)
+        #self.main.table.setModel(PandasModel(df))
+        self.main.table.setRowCount(df.shape[0])
+        self.main.table.setColumnCount(df.shape[1])
+
+        for i, row in df.iterrows():
+            for j, value in row.iteritems():
+                item = QTableWidgetItem(str(value))
+                self.main.table.setItem(i, j, item)
+
 
     def open_file(self, type: bool):
         way = QFileDialog.getOpenFileName(self, 'Open File', '', 'All Files ( * )')

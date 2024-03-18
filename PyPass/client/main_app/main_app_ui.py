@@ -3,6 +3,7 @@ from PySide6.QtWidgets import (
     QGridLayout,
     QPushButton,
     QLineEdit,
+    QTableWidget,
     QTableView,
 )
 from lang import language
@@ -57,5 +58,5 @@ class MainAppUI(QWidget):
         self.grid.addWidget(self.open_settings_b, 2, 2, 1, 1)
 
         # Таблица
-        self.table = QTableView()
+        self.table = QTableWidget()
         self.grid.addWidget(self.table, 3, 0, 1, 3)
