@@ -3,7 +3,7 @@ from sys import argv, exit
 from PySide6.QtWidgets import QApplication
 
 from client import MainApp, ErrorApp
-from core import create_log, create_key
+from core import create_log
 from start import main_check
 
 

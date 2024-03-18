@@ -3,22 +3,25 @@ from PySide6.QtCore import QSize, QMargins
 
 
 # ! ОСНОВА
-ERROR_FOUND: Final = 'Найдена критическая ошибка! Отправьте файл "logger.log" разработчику'
+ERROR_FOUND: Final = (
+    'Найдена критическая ошибка! Отправьте файл "logger.log" разработчику'
+)
 
-FILE_SETTINGS: Final = 'settings.toml'
-FILE_SETTINGS_KEY: Final = b'o_yl3RRwxwQCAqBlCncJR--fzxFxdrGV6aDqdqXH8yM='
+FILE_SETTINGS: Final = "settings.toml"
+FILE_SETTINGS_KEY: Final = b"o_yl3RRwxwQCAqBlCncJR--fzxFxdrGV6aDqdqXH8yM="
 SETTINGS_IN: Final = {
-    'language': 'ru',
-    'save_loc': True,
-    'way_to_file': '',
-    'way_to_key': '',
+    "language": "ru",
+    "save_loc": True,
+    "way_to_file": "",
+    "way_to_key": "",
 }
-NEW_KEY_FILE: Final = 'PyPassKey.pypass'
-NEW_DB_FILE: Final = 'Pandas.pypass'
+NEW_KEY_FILE: Final = "PyPassKey.pypass"
+NEW_DB_FILE: Final = "Pandas.pypass"
 
+HORIZONTAL_HEADERS: Final = ()
 
 # ! ОКНА
-MAIN_APP_SIZE: Final = QSize(700, 500)
+MAIN_APP_SIZE: Final = QSize(400, 500)
 ERROR_APP_SIZE: Final = QSize(200, 50)
 WARNING_APP_SIZE: Final = QSize(200, 50)
 

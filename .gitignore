@@ -6,3 +6,7 @@ venv
 logger.log
 test.txt
 settings.toml
+
+Pandas.pypass
+PyPassKey.pypass
+pandas.csv

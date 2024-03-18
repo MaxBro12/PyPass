@@ -1,9 +1,5 @@
 import pandas as pd
-from PySide6.QtWidgets import (
-    QMainWindow,
-    QFileDialog,
-    QTableWidgetItem
-)
+from PySide6.QtWidgets import QMainWindow, QFileDialog, QTableWidgetItem
 from PySide6.QtCore import QAbstractTableModel, Qt
 
 from .main_app_ui import MainAppUI
@@ -22,11 +18,13 @@ from core import (
     create_key,
 )
 from settings import (
+    MAIN_APP_SIZE,
     FILE_SETTINGS,
     FILE_SETTINGS_KEY,
     NEW_KEY_FILE,
     NEW_DB_FILE,
 )
+from lang import language
 
 
 class PandasModel(QAbstractTableModel):
@@ -65,22 +63,26 @@ class PandasModel(QAbstractTableModel):
 class MainApp(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
-        
+
         self.load_config()
 
-        self.main = MainAppUI(self.config['language'])
-        self.setCentralWidget(self.main)
-        
+        self.ui = MainAppUI(self.config["language"])
+        self.setCentralWidget(self.ui)
+        self.setMinimumSize(MAIN_APP_SIZE)
+
         # Подключаем кнопки
+        self.ui.open_file_b.clicked.connect(lambda: self.open_file(True))
+        self.ui.open_key_b.clicked.connect(lambda: self.open_file(False))
 
-        self.main.open_file_b.clicked.connect(lambda: self.open_file(True))
-        self.main.open_key_b.clicked.connect(lambda: self.open_file(False))
+        self.ui.gen_key_b.clicked.connect(self.generate_key)
+        self.ui.gen_password_b.clicked.connect(self.generate_pass)
 
-        self.main.gen_key_b.clicked.connect(self.generate_key)
+        self.ui.add_row.clicked.connect(self.add_row)
 
-        if self.main.open_file_b.text() != '' and self.main.open_key_b.text() != '':
-            self.update_table()
+        self.ui.table.cellChanged.connect(self.save_db)
 
+        if self.ui.open_file_b.text() != "" and self.ui.open_key_b.text() != "":
+            self.update_db()
 
     # Главные методы
     def load_config(self):
@@ -89,49 +91,103 @@ class MainApp(QMainWindow):
         )
 
     def save_config(self):
-        print('save db')
         save_cryp_file_with_key(
             FILE_SETTINGS, write_to_toml_str(self.config), FILE_SETTINGS_KEY
         )
 
-    def load_db(self) -> pd.DataFrame:
-        return load_db(self.main.way_to_file.text(), self.main.way_to_key.text())
+    def get_db(self) -> pd.DataFrame:
+        row_count = self.ui.table.rowCount()
+        column_count = self.ui.table.columnCount()
+        df = pd.DataFrame(index=range(row_count), columns=range(column_count))
 
-    def save_db(self):
+        for row in range(row_count):
+            for column in range(column_count):
+                item = self.ui.table.item(row, column)
+                if item is not None:
+                    df.iloc[row, column] = item.text()
+
+        return df
+
+    def update_db(self):
+        df = self.load_db()
+        print("load")
+        print(df.dtypes)
+        print(df.head())
+        for col in df.columns:
+            df[col] = df[col].astype("object")
+        df = df.drop_duplicates()
+
+        print("drop")
+        print(df.dtypes)
+        print(df.head())
+        for i, row in enumerate(df.to_numpy()):
+            if all(map(lambda x: pd.isna(x), row)):
+                df = df.drop(index=i)
+
+        print("remove nan")
+        print(df.dtypes)
+        print(df.head())
+        self.ui.table.clear()
+        self.ui.table.setRowCount(df.shape[0])
+        self.ui.table.setColumnCount(df.shape[1])
+        self.ui.table.setHorizontalHeaderLabels(
+            language[self.config["language"]]["table_h_header"]
+        )
+        self.ui.table.horizontalHeader().setStretchLastSection(True)
+        # self.ui.table.header.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+        for i in range(df.shape[0]):
+            for j in range(df.shape[1]):
+                item = QTableWidgetItem(str(df.iloc[i, j]))
+                self.ui.table.setItem(i, j, item)
+
+    def add_row(self):
+        df = self.get_db()
+        df.loc[len(df.index)] = language[self.config["language"]]["add_row"]
+        print(df)
+        self.save_db(df)
+        self.update_db()
+
+    def load_db(self) -> pd.DataFrame:
+        return load_db(self.ui.way_to_file.text(), self.ui.way_to_key.text())
+
+    def save_db(self, df: pd.DataFrame | None = None):
+        print(type(df))
+        if df is None or type(df) is int:
+            df = self.get_db()
+        save_db(self.ui.way_to_file.text(), df, self.ui.way_to_key.text())
+
+    def generate_pass(self):
         pass
 
     def generate_key(self):
         save_file_bytes(NEW_KEY_FILE, create_key())
-        save_db(NEW_DB_FILE, pd.DataFrame({'Name':['New', 'test'], 'Login':['Password', 'test'],'Password':['Data', 'test']}), NEW_KEY_FILE)
-        dia = NewKeyGenDia(None, NEW_KEY_FILE, self.config['language'])
+        save_db(
+            NEW_DB_FILE,
+            pd.DataFrame(
+                {
+                    "Name": ["New", "test"],
+                    "Login": ["Password", "test"],
+                    "Password": ["Data", "test"],
+                }
+            ),
+            NEW_KEY_FILE,
+        )
+        dia = NewKeyGenDia(None, NEW_KEY_FILE, self.config["language"])
         dia.exec()
-        self.main.way_to_file.setText(NEW_DB_FILE)
-        self.main.way_to_key.setText(NEW_KEY_FILE)
-        self.update_table()
+        self.ui.way_to_file.setText(NEW_DB_FILE)
+        self.ui.way_to_key.setText(NEW_KEY_FILE)
+        self.update_db()
 
     # ! Открытие таблицы
     def try_open(self):
-        print('try to open')
-        if self.main.open_file_b.text() != '' and self.main.open_file_b.text() != '':
-            self.update_table
-
-    def update_table(self):
-        df = self.load_db()
-        #self.main.table.setModel(PandasModel(df))
-        self.main.table.setRowCount(df.shape[0])
-        self.main.table.setColumnCount(df.shape[1])
-
-        for i, row in df.iterrows():
-            for j, value in row.iteritems():
-                item = QTableWidgetItem(str(value))
-                self.main.table.setItem(i, j, item)
-
+        if self.ui.way_to_file.text() != "" and self.ui.way_to_key.text() != "":
+            self.update_db()
 
     def open_file(self, type: bool):
-        way = QFileDialog.getOpenFileName(self, 'Open File', '', 'All Files ( * )')
+        way = QFileDialog.getOpenFileName(self, "Open File", "", "All Files ( * )")
         if type:
-            self.main.way_to_file.setText(way[0])
+            self.ui.way_to_file.setText(way[0])
             self.try_open()
         else:
-            self.main.way_to_key.setText(way[0])
+            self.ui.way_to_key.setText(way[0])
             self.try_open()
